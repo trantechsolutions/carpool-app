@@ -9,6 +9,7 @@ import { TeacherView } from './pages/TeacherView';
 import { ReceiverView } from './pages/ReceiverView';
 import { CallerInterface } from './pages/CallerInterface';
 import { Login } from './pages/Login'; // Import Login
+import './App.css'
 
 // Small helper to hide Navigation on Login page
 const Layout = ({ children }) => {

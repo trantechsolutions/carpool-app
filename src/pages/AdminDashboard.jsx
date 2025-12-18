@@ -28,7 +28,10 @@ export const AdminDashboard = () => {
 
   // Print Ref
   const componentRef = React.useRef();
-  const handlePrint = useReactToPrint({ content: () => componentRef.current });
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef, // Pass the ref object directly here
+    documentTitle: "Carpool Signs",
+  });
 
   // --- EFFECT: Load students when entering Manage tab ---
   useEffect(() => {
@@ -45,14 +48,6 @@ export const AdminDashboard = () => {
 
   // --- Handlers ---
 
-  const handlePrintClick = () => {
-  if (filteredStudents.length === 0) {
-    alert("No students visible to print!");
-    return;
-  }
-  handlePrint(); // The function from useReactToPrint
-};
-  
   const handleEditClick = (student) => {
     setEditingId(student.id);
     setEditFormData(student); // Pre-fill form
@@ -116,7 +111,7 @@ export const AdminDashboard = () => {
               onChange={e => setSearchTerm(e.target.value)}
               className="search-box"
             />
-            <button onClick={handlePrintClick} className="btn-secondary">🖨️ Print Visible Signs</button>
+            <button onClick={handlePrint} className="btn-secondary">🖨️ Print Visible Signs</button>
           </div>
 
           <div className="roster-table-wrapper">

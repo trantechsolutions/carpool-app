@@ -1,42 +1,90 @@
 // src/components/CarpoolSign.jsx
 import React from 'react';
 import QRCode from "react-qr-code";
-// Make sure you imported the CSS from Step 1 in your main App file
 
 export const CarpoolSign = React.forwardRef(({ studentList }, ref) => {
-  // studentList accepts an array, allowing you to print 1 or 500 signs at once.
+  
+  // --- 1. GROUPING LOGIC ---
+  // We turn the flat list of students into "Families" based on Carpool Number
+  const families = studentList.reduce((acc, student) => {
+    const number = student.carpoolNumber;
+    if (!acc[number]) {
+      acc[number] = [];
+    }
+    acc[number].push(student);
+    return acc;
+  }, {});
+
+  // Sort families by number for printing order
+  const sortedNumbers = Object.keys(families).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+  // --- 2. HELPER: FIND YOUNGEST ZONE ---
+  // Map grades to a numeric value to find the "minimum" (youngest)
+  const gradeRank = {
+    "PK": 0, "PK3": 0, "PK4": 0, "PreK": 0,
+    "K": 1, "KG": 1,
+    "1st": 2, "1": 2,
+    "2nd": 3, "2": 3,
+    "3rd": 4, "3": 4,
+    "4th": 5, "4": 5,
+    "5th": 6, "5": 6,
+    "6th": 7, "6": 7,
+    "7th": 8, "7": 8
+  };
+
+  const getPrimaryZone = (students) => {
+    // Sort kids by grade rank (ascending)
+    const sortedKids = [...students].sort((a, b) => {
+      const rankA = gradeRank[a.grade] !== undefined ? gradeRank[a.grade] : 99;
+      const rankB = gradeRank[b.grade] !== undefined ? gradeRank[b.grade] : 99;
+      return rankA - rankB;
+    });
+    // Return the zone of the youngest child
+    return sortedKids[0].pickupZone;
+  };
+
   return (
     <div ref={ref} className="print-only-container">
-      {studentList.map((student) => (
-        <div key={student.id} className="sign-page">
-          
-          {/* 1. The Big Number for Humans (20ft viewing distance) */}
-          <h1 className="hero-number">
-            {student.carpoolNumber}
-          </h1>
+      {sortedNumbers.map((number) => {
+        const siblings = families[number];
+        const primaryZone = getPrimaryZone(siblings);
 
-          {/* 2. The QR Code for Scanners (2ft viewing distance) */}
-          {/* We encode ONLY the number string for fastest scanning */}
-          <div className="qr-container">
-             <QRCode 
-                value={String(student.carpoolNumber)} 
-                size={256} /* Large enough for easy scanning */
-                level={"H"} /* High error correction level */
-             />
+        return (
+          // ONE PAGE PER FAMILY
+          <div key={number} className="sign-page">
+            
+            {/* 1. Big Number */}
+            <h1 className="hero-number">{number}</h1>
+            
+            {/* 2. QR Code */}
+            <div className="qr-container">
+               <QRCode 
+                 value={String(number)} 
+                 size={250} 
+                 level={"H"} 
+               />
+            </div>
+
+            {/* 3. List of Names */}
+            <div className="student-details">
+              {siblings.map((child, idx) => (
+                <div key={child.id} className="sibling-row" style={{marginBottom: '15px'}}>
+                  <h2>{child.fullName}</h2>
+                  <p>
+                     {child.grade} • {child.teacher}
+                  </p>
+                </div>
+              ))}
+              
+              {/* 4. Zone Indicator (Primary) */}
+              <div className="zone-footer">
+                 Pickup Zone: <strong>{primaryZone}</strong>
+              </div>
+            </div>
+            
           </div>
-
-          {/* 3. Verification Details (for after the car stops) */}
-          <div className="student-details">
-            <h2>{student.lastName} Family</h2>
-            {/* If you use family numbers, list children here: */}
-            <p>{student.childrenNames} ({student.grade})</p>
-          </div>
-
-           <div style={{marginTop: '20px', fontSize: '12pt'}}>
-              St. Mary's Elementary Carpool 2025-2026
-           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 });
