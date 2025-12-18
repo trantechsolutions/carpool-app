@@ -1,0 +1,150 @@
+/* src/pages/ReceiverView.css */
+
+/* Main Container */
+.receiver-container {
+  max-width: 900px;
+  margin: 20px auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Header */
+.receiver-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #2c3e50;
+  color: white;
+  padding: 20px 30px;
+}
+
+.zone-select {
+  font-size: 1.2rem;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.95);
+  color: #2c3e50;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* List Area */
+.queue-list {
+  background: white;
+  min-height: 500px;
+  padding: 0;
+}
+
+/* Empty State */
+.empty-queue {
+  padding: 80px 20px;
+  text-align: center;
+  color: #94a3b8;
+}
+
+/* --- THE CARD STYLES --- */
+.queue-card {
+  display: flex; /* Aligns items in a row */
+  align-items: center; /* Vertically centers them */
+  justify-content: space-between;
+  padding: 25px 30px;
+  border-bottom: 1px solid #e2e8f0;
+  background: white;
+  transition: background 0.2s;
+  gap: 20px; /* Forces space between elements */
+}
+
+/* Green Strip for Active Cards */
+.queue-card.active-card {
+  background: #fff;
+  border-left: 8px solid #22c55e;
+}
+
+/* Position Circle (The part that was breaking) */
+.queue-pos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  /* FIXED DIMENSIONS */
+  width: 70px;
+  height: 70px;
+  min-width: 70px; /* Prevents squashing */
+  border-radius: 50%;
+  
+  background: #f1f5f9;
+  color: #64748b;
+  margin-right: 10px;
+  
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.queue-pos .label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+/* Middle Info Section */
+.queue-info {
+  flex: 1; /* Takes up all available remaining space */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.q-number-large {
+  font-size: 2.2rem; /* Big and readable */
+  font-weight: 900;
+  color: #2c3e50;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.q-name-large {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #334155;
+  margin: 0;
+}
+
+.q-teacher {
+  font-size: 1rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* The Button */
+.btn-receiver-dismiss {
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  padding: 0;
+  height: 60px;
+  width: 140px; /* Fixed width for consistency */
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(34, 197, 94, 0.2);
+  transition: transform 0.1s, background 0.2s;
+  
+  /* Flex to center text inside button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-receiver-dismiss:active {
+  transform: scale(0.96);
+  background-color: #16a34a;
+}
